@@ -1,11 +1,16 @@
 $cdir = Split-Path -leaf -path (Get-Location)
-Write-Output "g++ -o main ./main.cpp"
-Remove-Item main.exe
-g++ -o main ./main.cpp
-if ($?) {
-    py -3 ../../tools/chk_$cdir.py $args[0]
-} else {
-    Write-Output ""
-    Write-Output "Error while compiling ./main.cpp!" 
-    Write-Output ""
+if (test-path main.exe) {
+    Remove-Item main.exe
 }
+if (test-path main.cpp) {
+    Write-Output "g++ -o main ./main.cpp"
+    g++ -o main ./main.cpp
+    if ($?) {
+        py -3 ../../tools/chk_$cdir.py $args[0]
+    } else {
+        Write-Output "`nError while compiling ./main.cpp!`n" 
+    }
+} else {
+    Write-Output "`nmain.cpp: No such file!`n"
+}
+
