@@ -1,3 +1,11 @@
+$cdir = Split-Path -leaf -path (Get-Location)
 Write-Output "g++ -o main ./main.cpp"
+Remove-Item main.exe
 g++ -o main ./main.cpp
-py -3 ../../tools/chk_hw04.py $args[0]
+if ($?) {
+    py -3 ../../tools/chk_$cdir.py $args[0]
+} else {
+    Write-Output ""
+    Write-Output "Error while compiling ./main.cpp!" 
+    Write-Output ""
+}
